@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnvConfiguration, JoiValidationSchema } from './config';
 
 import { AuthModule } from './auth/auth.module';
+import { UserInfoModule } from './user-info/user-info.module';
 
 @Module({
   imports: [
@@ -23,8 +24,7 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
     }),
     AuthModule,
+    UserInfoModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

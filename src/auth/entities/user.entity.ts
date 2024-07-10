@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { UserInfo } from 'src/user-info/entities/user-info.entity';
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -20,8 +22,10 @@ export class User {
   @Column('bool', { default: true })
   isActive: boolean;
 
-  @Column('text', { array: true, default: ['user'] })
+  @Column('text', { array: true, default: ['medic'] })
   roles: string[];
+
+  userInfo: UserInfo;
 
   @BeforeInsert()
   checkFieldsBeforeInsert() {

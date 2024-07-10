@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,11 +11,14 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 import { User } from './entities/user.entity';
+
 import { UserDto } from './dto/user.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger('AuthService');
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -56,7 +60,7 @@ export class AuthService {
 
   private handleDBErrors(error: any): never {
     if (error.code === '23505') throw new BadRequestException(error.detail);
-    console.log(error);
+    this.logger.error(error);
     throw new InternalServerErrorException('Please check server logs');
   }
 }
