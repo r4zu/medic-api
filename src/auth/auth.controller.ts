@@ -1,10 +1,7 @@
-import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Post, Body } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { UserDto } from './dto/user.dto';
-import { User } from './entities/user.entity';
-import { GetUser, RawHeaders } from './decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -20,19 +17,16 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
-  @Get('private')
-  @UseGuards(AuthGuard())
-  testingPrivateRoute(
-    @GetUser() user: User,
-    @GetUser('email') userEmail: string,
-    @RawHeaders() headers: string[],
-  ) {
-    return {
-      ok: true,
-      message: 'Hola mundo private',
-      user,
-      userEmail,
-      headers,
-    };
-  }
+  // ? Example
+  // ? Just @Auth alone is for authentication
+  // ? Give @Auth through ValidRoles is for roles autorization
+  // ? Also we've @GetUser to get info of the current user
+  // @Get('private')
+  // @Auth(ValidRoles.user)
+  // privateRoute(@GetUser() user: string) {
+  //   return {
+  //     ok: true,
+  //     user,
+  //   };
+  // }
 }
