@@ -13,8 +13,9 @@ import * as bcrypt from 'bcrypt';
 
 import { User } from './entities/user.entity';
 
-import { UserDto } from './dto/user.dto';
+import { RoleDto, UserDto } from './dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { ValidRoles } from './interfaces';
 
 @Injectable()
 export class AuthService {
@@ -52,6 +53,24 @@ export class AuthService {
     if (!bcrypt.compareSync(password, user.password))
       throw new UnauthorizedException(`Credentials are not valid (password)`);
     return { ...user, token: this.getJwtToken({ id: user.id }) };
+  }
+
+  async changeRole(data: RoleDto) {
+    const { email, role } = data;
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user)
+      throw new NotFoundException(`User with email: ${email} not found`);
+    if (role !== ValidRoles.medic && role !== ValidRoles.assistant) {
+      throw new NotFoundException(
+        `Rol with: ${role} doesn't exist, check other rol.`,
+      );
+    }
+    const userUpdated = await this.userRepository.preload({
+      id: user.id,
+      roles: [role],
+    });
+    await this.userRepository.save(userUpdated);
+    return userUpdated;
   }
 
   async remove(id: string) {

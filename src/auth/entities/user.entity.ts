@@ -23,7 +23,7 @@ export class User {
   @Column('bool', { default: true })
   isActive: boolean;
 
-  @Column('text', { array: true, default: ['medic'] })
+  @Column('text', { array: true, default: ['user'] })
   roles: string[];
 
   @OneToOne(() => UserInfo, (userInfo) => userInfo.user, { cascade: true })

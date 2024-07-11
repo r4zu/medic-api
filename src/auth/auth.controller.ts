@@ -5,11 +5,12 @@ import {
   Delete,
   Param,
   ParseUUIDPipe,
+  Patch,
 } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 
-import { UserDto } from './dto/user.dto';
+import { RoleDto, UserDto } from './dto';
 import { Auth } from './decorators';
 import { ValidRoles } from './interfaces';
 
@@ -25,6 +26,12 @@ export class AuthController {
   @Post('login')
   loginUser(@Body() loginUserDto: UserDto) {
     return this.authService.login(loginUserDto);
+  }
+
+  @Patch('change-role')
+  @Auth(ValidRoles.admin)
+  changeRole(@Body() data: RoleDto) {
+    return this.authService.changeRole(data);
   }
 
   @Delete(':id')

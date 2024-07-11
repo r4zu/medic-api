@@ -1,5 +1,7 @@
 # Medic API
 
+Para ejecutar este proyecto necesitas tener instalado NodeJS y Docker.
+
 1. Clonar proyecto
 2. Instalar nestjs
 
