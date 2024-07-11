@@ -1,8 +1,17 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Delete,
+  Param,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 
 import { UserDto } from './dto/user.dto';
+import { Auth } from './decorators';
+import { ValidRoles } from './interfaces';
 
 @Controller('auth')
 export class AuthController {
@@ -16,6 +25,12 @@ export class AuthController {
   @Post('login')
   loginUser(@Body() loginUserDto: UserDto) {
     return this.authService.login(loginUserDto);
+  }
+
+  @Delete(':id')
+  @Auth(ValidRoles.admin)
+  removeUser(@Param('id', ParseUUIDPipe) id: string) {
+    return this.authService.remove(id);
   }
 
   // ? Example

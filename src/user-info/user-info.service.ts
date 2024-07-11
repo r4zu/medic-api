@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { UserInfo } from './entities/user-info.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 import { CreateUserInfoDto } from './dto/create-user-info.dto';
 import { UpdateUserInfoDto } from './dto/update-user-info.dto';
@@ -22,9 +23,12 @@ export class UserInfoService {
     private readonly userInfoRepository: Repository<UserInfo>,
   ) {}
 
-  async create(createUserInfoDto: CreateUserInfoDto) {
+  async create(user: User, createUserInfoDto: CreateUserInfoDto) {
     try {
-      const userInfo = this.userInfoRepository.create(createUserInfoDto);
+      const userInfo = this.userInfoRepository.create({
+        ...createUserInfoDto,
+        user,
+      });
       await this.userInfoRepository.save(userInfo);
       return userInfo;
     } catch (error) {
@@ -32,18 +36,29 @@ export class UserInfoService {
     }
   }
 
-  async findByUserId(id: string) {
-    return;
+  async findUserInfoByUser(user: User) {
+    try {
+      const findUserInfoByUser = await this.userInfoRepository.findOne({
+        where: { user: user },
+      });
+      if (!findUserInfoByUser)
+        throw new NotFoundException(`User with id: ${user.id} not found`);
+      return findUserInfoByUser;
+    } catch (error) {
+      this.handleExceptions(error);
+    }
   }
 
-  async update(id: string, updateUserInfoDto: UpdateUserInfoDto) {
-    const userInfo = await this.userInfoRepository.preload({
-      id: id,
+  async update(user: User, updateUserInfoDto: UpdateUserInfoDto) {
+    const findUserInfoByUser = await this.findUserInfoByUser(user);
+    const userInfoToUpdate = await this.userInfoRepository.preload({
+      id: findUserInfoByUser.id,
       ...updateUserInfoDto,
     });
-    if (!userInfo) throw new NotFoundException(`User with id: ${id} not found`);
-    await this.userInfoRepository.save(userInfo);
-    return userInfo;
+    if (!userInfoToUpdate)
+      throw new NotFoundException(`User with id: ${user.id} not found`);
+    await this.userInfoRepository.save(userInfoToUpdate);
+    return userInfoToUpdate;
   }
 
   private handleExceptions(error: any): never {

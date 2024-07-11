@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { User } from 'src/auth/entities/user.entity';
 
@@ -28,5 +34,7 @@ export class UserInfo {
   @Column('text')
   address: string;
 
+  @OneToOne(() => User, (user) => user.userInfo, { onDelete: 'CASCADE' })
+  @JoinColumn()
   user: User;
 }

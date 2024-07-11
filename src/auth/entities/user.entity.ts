@@ -3,6 +3,7 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -25,6 +26,7 @@ export class User {
   @Column('text', { array: true, default: ['medic'] })
   roles: string[];
 
+  @OneToOne(() => UserInfo, (userInfo) => userInfo.user, { cascade: true })
   userInfo: UserInfo;
 
   @BeforeInsert()
