@@ -11,7 +11,7 @@ FROM node:20-alpine3.19 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN pnpm run build
+RUN npm install -g pnpm && pnpm run build
 
 # Production image, copy all the files and run next
 FROM node:20-alpine3.19 AS runner
