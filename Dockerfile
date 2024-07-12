@@ -21,7 +21,7 @@ COPY . .
 RUN pnpm build
 
 # Expone el puerto en el que la aplicación se ejecutará
-EXPOSE 3000
+# EXPOSE 3000
 
 # Comando para ejecutar la aplicación
 CMD ["pnpm", "start:prod"]
