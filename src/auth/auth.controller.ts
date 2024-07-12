@@ -34,6 +34,13 @@ export class AuthController {
     return this.authService.changeRole(data);
   }
 
+  // TODO: This controller
+  // @Patch('change-active')
+  // @Auth(ValidRoles.admin)
+  // changeActive(@Body() isActive: boolean) {
+  //   return;
+  // }
+
   @Delete(':id')
   @Auth(ValidRoles.admin)
   removeUser(@Param('id', ParseUUIDPipe) id: string) {
