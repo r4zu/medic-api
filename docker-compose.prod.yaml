@@ -1,6 +1,6 @@
 services:
   medic-api:
-    image: r4zu91/medic-api
+    image: medic-api
     container_name: medic-api
     restart: always
     build:
