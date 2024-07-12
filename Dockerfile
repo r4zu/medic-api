@@ -1,27 +1,27 @@
-# Install dependencies only when needed
-FROM node:18-alpine3.15 AS deps
+# Usa una imagen base de Node.js
+FROM node:20-alpine3.19
 
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
+# Instala pnpm globalmente
+RUN npm install -g pnpm
 
-# Build the app with cache dependencies
-FROM node:18-alpine3.15 AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN npm install -g pnpm && pnpm run build
-
-# Production image, copy all the files and run next
-FROM node:18-alpine3.15 AS runner
-
-# Set working directory
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /usr/src/app
-COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install --prod --frozen-lockfile
-COPY --from=builder /app/dist ./dist
 
-# EXPOSE 3000
+# Copia el archivo pnpm-lock.yaml y el package.json al directorio de trabajo
+COPY pnpm-lock.yaml ./
+COPY package.json ./
 
-CMD [ "node", "dist/main" ]
+# Instala las dependencias usando pnpm
+RUN pnpm install --frozen-lockfile
+
+# Copia el resto del código de la aplicación al directorio de trabajo
+COPY . .
+
+# Compila la aplicación NestJS
+RUN pnpm build
+
+# Expone el puerto en el que la aplicación se ejecutará
+EXPOSE 3000
+
+# Comando para ejecutar la aplicación
+CMD ["pnpm", "start:prod"]

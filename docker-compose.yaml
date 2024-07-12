@@ -1,26 +1,31 @@
 services:
   medic-api:
-    image: medic-api
+    image: r4zu91/medic-api
     container_name: medic-api
     restart: always
     build:
       context: .
       dockerfile: Dockerfile
+    command: pnpm start:dev
     depends_on:
-      - db
-    environment:
-      DATABASE_URL: ${DB_HOST}
+      - postgres
     ports:
-      - '${PORT}:${PORT}'
+      - '3000:3000'
 
-  db:
+  postgres:
     image: postgres:14.0
-    restart: always
+    container_name: medicdb
+    restart: unless-stopped
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
-    container_name: medicdb
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_PORT: ${DB_PORT}
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+  postgres:
