@@ -52,7 +52,11 @@ export class AuthService {
       throw new UnauthorizedException(`Credentials are not valid (email)`);
     if (!bcrypt.compareSync(password, user.password))
       throw new UnauthorizedException(`Credentials are not valid (password)`);
-    return { ...user, token: this.getJwtToken({ id: user.id }) };
+    return {
+      id: user.id,
+      email: user.email,
+      token: this.getJwtToken({ id: user.id }),
+    };
   }
 
   async changeRole(data: RoleDto) {
@@ -71,6 +75,18 @@ export class AuthService {
     });
     await this.userRepository.save(userUpdated);
     return userUpdated;
+  }
+
+  async softDelete(email: string) {
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user)
+      throw new NotFoundException(`User with email: ${email} not found`);
+    const userUpdate = await this.userRepository.preload({
+      id: user.id,
+      isActive: !user.isActive,
+    });
+    await this.userRepository.save(userUpdate);
+    return userUpdate;
   }
 
   async remove(id: string) {

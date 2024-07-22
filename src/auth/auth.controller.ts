@@ -34,12 +34,11 @@ export class AuthController {
     return this.authService.changeRole(data);
   }
 
-  // TODO: This controller
-  // @Patch('change-active')
-  // @Auth(ValidRoles.admin)
-  // changeActive(@Body() isActive: boolean) {
-  //   return;
-  // }
+  @Patch('soft-delete')
+  @Auth(ValidRoles.admin)
+  softDeleteUserByEmail(@Body('email') email: string) {
+    return this.authService.softDelete(email);
+  }
 
   @Delete(':id')
   @Auth(ValidRoles.admin)
