@@ -6,6 +6,8 @@ import {
   Param,
   ParseUUIDPipe,
   Patch,
+  Get,
+  Query,
 } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
@@ -13,6 +15,7 @@ import { AuthService } from './auth.service';
 import { RoleDto, UserDto } from './dto';
 import { Auth } from './decorators';
 import { ValidRoles } from './interfaces';
+import { PaginationDto } from 'src/common/dto/pagination.dtos';
 
 @Controller('auth')
 export class AuthController {
@@ -26,6 +29,12 @@ export class AuthController {
   @Post('login')
   loginUser(@Body() loginUserDto: UserDto) {
     return this.authService.login(loginUserDto);
+  }
+
+  @Get('all')
+  @Auth(ValidRoles.admin)
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.authService.findAll(paginationDto);
   }
 
   @Patch('change-role')

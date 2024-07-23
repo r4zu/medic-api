@@ -8,14 +8,14 @@ services:
       dockerfile: Dockerfile
     command: pnpm start:dev
     depends_on:
-      - postgres
+      - medic-db
     ports:
       - 3000:3000
 
-  postgres:
+  medic-db:
     image: postgres:14.0
-    container_name: medicdb
-    restart: unless-stopped
+    container_name: medic-db
+    restart: always
     ports:
       - 5432:5432
     environment:
@@ -23,9 +23,6 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_HOST: ${DB_HOST}
-      POSTGRES_PORT: 5432
+      POSTGRES_PORT: ${DB_PORT}
     volumes:
       - postgres:/var/lib/postgresql/data
-
-volumes:
-  postgres:

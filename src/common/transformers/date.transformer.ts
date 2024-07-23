@@ -12,3 +12,15 @@ export function TransformDate() {
     return value;
   });
 }
+
+export function TransformDateWithHour() {
+  return Transform(({ value }) => {
+    if (typeof value === 'string') {
+      const date = parse(value, 'dd-MM-yyyy HH:mm:ss', new Date());
+      if (isValid(date)) {
+        return date;
+      }
+    }
+    return value;
+  });
+}
