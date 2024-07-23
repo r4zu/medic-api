@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { UserInfo } from 'src/user-info/entities/user-info.entity';
+import { MedicInfo } from 'src/medic-info/entities/medic-info.entity';
 
 @Entity('users')
 export class User {
@@ -28,6 +29,9 @@ export class User {
 
   @OneToOne(() => UserInfo, (userInfo) => userInfo.user, { cascade: true })
   userInfo: UserInfo;
+
+  @OneToOne(() => MedicInfo, (medicInfo) => medicInfo.user, { cascade: true })
+  medicInfo: MedicInfo;
 
   @BeforeInsert()
   checkFieldsBeforeInsert() {

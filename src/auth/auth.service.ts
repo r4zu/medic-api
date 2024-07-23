@@ -16,6 +16,7 @@ import { User } from './entities/user.entity';
 import { RoleDto, UserDto } from './dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { ValidRoles } from './interfaces';
+import { PaginationDto } from 'src/common/dto/pagination.dtos';
 
 @Injectable()
 export class AuthService {
@@ -52,7 +53,31 @@ export class AuthService {
       throw new UnauthorizedException(`Credentials are not valid (email)`);
     if (!bcrypt.compareSync(password, user.password))
       throw new UnauthorizedException(`Credentials are not valid (password)`);
-    return { ...user, token: this.getJwtToken({ id: user.id }) };
+    return {
+      id: user.id,
+      email: user.email,
+      token: this.getJwtToken({ id: user.id }),
+    };
+  }
+
+  async findAll(paginationDto: PaginationDto) {
+    const { page, limit } = paginationDto;
+    const totalPages = await this.userRepository.count({
+      where: { isActive: true },
+    });
+    const lastPage = Math.ceil(totalPages / limit);
+    return {
+      data: await this.userRepository.find({
+        skip: (page - 1) * limit,
+        take: limit,
+        where: { isActive: true },
+      }),
+      meta: {
+        total: totalPages,
+        page: page,
+        lastPage: lastPage,
+      },
+    };
   }
 
   async changeRole(data: RoleDto) {
@@ -71,6 +96,18 @@ export class AuthService {
     });
     await this.userRepository.save(userUpdated);
     return userUpdated;
+  }
+
+  async softDelete(email: string) {
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user)
+      throw new NotFoundException(`User with email: ${email} not found`);
+    const userUpdate = await this.userRepository.preload({
+      id: user.id,
+      isActive: !user.isActive,
+    });
+    await this.userRepository.save(userUpdate);
+    return userUpdate;
   }
 
   async remove(id: string) {

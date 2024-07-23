@@ -6,6 +6,8 @@ import {
   Param,
   ParseUUIDPipe,
   Patch,
+  Get,
+  Query,
 } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
@@ -13,6 +15,7 @@ import { AuthService } from './auth.service';
 import { RoleDto, UserDto } from './dto';
 import { Auth } from './decorators';
 import { ValidRoles } from './interfaces';
+import { PaginationDto } from 'src/common/dto/pagination.dtos';
 
 @Controller('auth')
 export class AuthController {
@@ -28,18 +31,23 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
+  @Get('all')
+  @Auth(ValidRoles.admin)
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.authService.findAll(paginationDto);
+  }
+
   @Patch('change-role')
   @Auth(ValidRoles.admin)
   changeRole(@Body() data: RoleDto) {
     return this.authService.changeRole(data);
   }
 
-  // TODO: This controller
-  // @Patch('change-active')
-  // @Auth(ValidRoles.admin)
-  // changeActive(@Body() isActive: boolean) {
-  //   return;
-  // }
+  @Patch('soft-delete')
+  @Auth(ValidRoles.admin)
+  softDeleteUserByEmail(@Body('email') email: string) {
+    return this.authService.softDelete(email);
+  }
 
   @Delete(':id')
   @Auth(ValidRoles.admin)
