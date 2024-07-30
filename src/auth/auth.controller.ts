@@ -37,6 +37,18 @@ export class AuthController {
     return this.authService.findAll(paginationDto);
   }
 
+  @Get('all-medics')
+  @Auth(ValidRoles.assistant)
+  findAllMedics() {
+    return this.authService.findAllMedics();
+  }
+
+  @Get('all-assistants')
+  @Auth(ValidRoles.medic)
+  findAllAssistants() {
+    return this.authService.findAllAssistants();
+  }
+
   @Patch('change-role')
   @Auth(ValidRoles.admin)
   changeRole(@Body() data: RoleDto) {

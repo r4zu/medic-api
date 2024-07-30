@@ -1,20 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDate, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsDate,
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+} from 'class-validator';
 
 import { TransformDateWithHour } from 'src/common/transformers/date.transformer';
 import { IsValidDays } from 'src/common/decorators/days-validator.decorator';
 
-export class CreateMedicInfoDto {
-  @ApiProperty()
-  @IsArray()
-  @IsNotEmpty()
-  speciality: string[];
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  registry: string;
-
+export class CreateAssistantInfoDto {
   @ApiProperty()
   @IsDate()
   @TransformDateWithHour()
@@ -32,4 +28,9 @@ export class CreateMedicInfoDto {
   @IsNotEmpty()
   @IsValidDays()
   days: string[];
+
+  @ApiProperty()
+  @IsString()
+  @IsEmail()
+  emailMedic: string;
 }

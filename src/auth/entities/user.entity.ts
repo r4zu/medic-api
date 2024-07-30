@@ -9,6 +9,7 @@ import {
 
 import { UserInfo } from 'src/user-info/entities/user-info.entity';
 import { MedicInfo } from 'src/medic-info/entities/medic-info.entity';
+import { AssistantInfo } from 'src/assistant-info/entities/assistant-info.entity';
 
 @Entity('users')
 export class User {
@@ -32,6 +33,16 @@ export class User {
 
   @OneToOne(() => MedicInfo, (medicInfo) => medicInfo.user, { cascade: true })
   medicInfo: MedicInfo;
+
+  @OneToOne(() => AssistantInfo, (assistantInfo) => assistantInfo.user, {
+    cascade: true,
+  })
+  assistantInfo: AssistantInfo;
+
+  @OneToOne(() => AssistantInfo, (assistantInfo) => assistantInfo.medic, {
+    cascade: true,
+  })
+  assistant: AssistantInfo;
 
   @BeforeInsert()
   checkFieldsBeforeInsert() {
