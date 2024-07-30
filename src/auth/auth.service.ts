@@ -47,7 +47,7 @@ export class AuthService {
     const { email, password } = loginUserDto;
     const user = await this.userRepository.findOne({
       where: { email },
-      select: { email: true, password: true, id: true },
+      select: { email: true, password: true, id: true, roles: true },
     });
     if (!user)
       throw new UnauthorizedException(`Credentials are not valid (email)`);
@@ -56,6 +56,7 @@ export class AuthService {
     return {
       id: user.id,
       email: user.email,
+      roles: user.roles,
       token: this.getJwtToken({ id: user.id }),
     };
   }
@@ -78,6 +79,22 @@ export class AuthService {
         lastPage: lastPage,
       },
     };
+  }
+
+  async findAllMedics() {
+    return await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.isActive = :isActive', { isActive: true })
+      .andWhere(':role = ANY(user.roles)', { role: 'medic' }) // If roles is an array
+      .getMany();
+  }
+
+  async findAllAssistants() {
+    return await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.isActive = :isActive', { isActive: true })
+      .andWhere(':role = ANY(user.roles)', { role: 'assistant' }) // If roles is an array
+      .getMany();
   }
 
   async changeRole(data: RoleDto) {

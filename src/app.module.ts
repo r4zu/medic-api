@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { envs } from './config';
+
 import { AuthModule } from './auth/auth.module';
 import { UserInfoModule } from './user-info/user-info.module';
-import { envs } from './config';
 import { MedicInfoModule } from './medic-info/medic-info.module';
+import { AssistantInfoModule } from './assistant-info/assistant-info.module';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { MedicInfoModule } from './medic-info/medic-info.module';
     AuthModule,
     UserInfoModule,
     MedicInfoModule,
+    AssistantInfoModule,
   ],
 })
 export class AppModule {}
