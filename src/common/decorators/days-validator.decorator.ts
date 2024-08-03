@@ -12,7 +12,7 @@ export class IsValidDaysConstraint implements ValidatorConstraintInterface {
     const validDays = [
       'lunes',
       'martes',
-      'miércoles',
+      'miercoles',
       'jueves',
       'viernes',
       'sabado',
@@ -22,7 +22,7 @@ export class IsValidDaysConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage(): string {
-    return 'Los días deben ser lunes, martes, miercoles, jueves, viernes, sabado, o domingo';
+    return "Los días deben ser 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado' o 'domingo'";
   }
 }
 

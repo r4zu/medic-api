@@ -1,4 +1,4 @@
-# Medic API
+# CMC API
 
 Para ejecutar este proyecto necesitas tener instalado NodeJS y Docker.
 

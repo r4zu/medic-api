@@ -20,8 +20,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Medic API')
-    .setDescription('An API about Medic Scheduling')
+    .setTitle('CMC API')
+    .setDescription('An API to manage patients and appointments')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
