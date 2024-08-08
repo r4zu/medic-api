@@ -1,19 +1,19 @@
 services:
-  medic-api:
-    container_name: medic-api
-    image: r4zu91/medic-api
+  cmc-api:
+    container_name: cmc-api
+    image: dallasrevolt/cmc-api
     build: .
     command: pnpm start:dev
     ports:
       - 3000:3000
     environment:
       - PORT=3000
-      - DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@medic-db:5432/${DB_NAME}?schema=public
+      - DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@cmc-db:5432/${DB_NAME}?schema=public
     depends_on:
-      - medic-db
+      - cmc-db
 
-  medic-db:
-    container_name: medic-db
+  cmc-db:
+    container_name: cmc-db
     image: postgres:14.0
     restart: always
     ports:

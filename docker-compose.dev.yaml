@@ -1,7 +1,7 @@
 services:
-  medic-db:
+  cmc-db:
     image: postgres:14.0
-    container_name: medic-db
+    container_name: cmc-db
     restart: always
     ports:
       - 5432:5432

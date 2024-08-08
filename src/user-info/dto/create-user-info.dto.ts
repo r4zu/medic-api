@@ -8,8 +8,8 @@ export class CreateUserInfoDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  @IsIn(['cedula', 'pasaporte', 'RUC'], {
-    message: 'dniType must be -cedula-, -pasaporte- o -RUC-',
+  @IsIn(['cedula', 'pasaporte', 'ruc'], {
+    message: 'dniType must be "cedula", "pasaporte" or "ruc"',
   })
   dniType: string;
 
