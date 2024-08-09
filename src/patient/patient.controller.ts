@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { Auth } from 'src/auth/decorators';
 
@@ -33,17 +34,20 @@ export class PatientController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.patientService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updatePatientDto: UpdatePatientDto,
+  ) {
     return this.patientService.update(id, updatePatientDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.patientService.remove(id);
   }
 }
