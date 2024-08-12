@@ -12,5 +12,6 @@ import { MedicInfoController } from './medic-info.controller';
   imports: [TypeOrmModule.forFeature([MedicInfo]), AuthModule],
   controllers: [MedicInfoController],
   providers: [MedicInfoService],
+  exports: [MedicInfoService],
 })
 export class MedicInfoModule {}

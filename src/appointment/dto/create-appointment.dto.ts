@@ -1,27 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDate, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsDate, IsNotEmpty, IsUUID } from 'class-validator';
 
 import { TransformDateWithHour } from 'src/common/transformers/date.transformer';
-import { IsValidDays } from 'src/common/decorators/days-validator.decorator';
 
-export class CreateAssistantInfoDto {
+export class CreateAppointmentDto {
   @ApiProperty()
   @IsDate()
   @TransformDateWithHour()
   @IsNotEmpty()
-  checkIn: Date;
+  startTime: Date;
 
   @ApiProperty()
   @IsDate()
   @TransformDateWithHour()
   @IsNotEmpty()
-  checkOut: Date;
+  endTime: Date;
 
   @ApiProperty()
-  @IsArray()
+  @IsUUID()
   @IsNotEmpty()
-  @IsValidDays()
-  days: string[];
+  patientId: string;
 
   @ApiProperty()
   @IsUUID()

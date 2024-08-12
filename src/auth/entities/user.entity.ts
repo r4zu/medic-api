@@ -3,6 +3,7 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -10,6 +11,8 @@ import {
 import { UserInfo } from 'src/user-info/entities/user-info.entity';
 import { MedicInfo } from 'src/medic-info/entities/medic-info.entity';
 import { AssistantInfo } from 'src/assistant-info/entities/assistant-info.entity';
+import { Patient } from 'src/patient/entities/patient.entity';
+import { Appointment } from 'src/appointment/entities/appointment.entity';
 
 @Entity('users')
 export class User {
@@ -43,6 +46,12 @@ export class User {
     cascade: true,
   })
   assistant: AssistantInfo;
+
+  @OneToMany(() => Patient, (patient) => patient.medic)
+  patient: Patient[];
+
+  @OneToMany(() => Appointment, (appointment) => appointment.medic)
+  appointments: Appointment[];
 
   @BeforeInsert()
   checkFieldsBeforeInsert() {
