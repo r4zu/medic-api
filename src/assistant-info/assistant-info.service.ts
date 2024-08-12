@@ -26,9 +26,9 @@ export class AssistantInfoService {
   ) {}
 
   async create(user: User, createAssistantInfoDto: CreateAssistantInfoDto) {
-    const { emailMedic, ...rest } = createAssistantInfoDto;
+    const { medicId, ...rest } = createAssistantInfoDto;
     const medic = await this.userRepository.findOne({
-      where: { email: emailMedic },
+      where: { id: medicId },
     });
     if (!medic || !medic.roles.includes('medic'))
       throw new NotFoundException('The user is not a medic or does not exist.');
@@ -61,11 +61,11 @@ export class AssistantInfoService {
   }
 
   async update(user: User, updateAssistantInfoDto: UpdateAssistantInfoDto) {
-    const { emailMedic, ...rest } = updateAssistantInfoDto;
+    const { medicId, ...rest } = updateAssistantInfoDto;
     let medic: User;
-    if (emailMedic) {
+    if (medicId) {
       medic = await this.userRepository.findOne({
-        where: { email: emailMedic },
+        where: { id: medicId },
       });
       if (!medic || !medic.roles.includes('medic'))
         throw new NotFoundException(

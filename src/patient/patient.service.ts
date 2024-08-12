@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Patient } from './entities/patient.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
@@ -21,13 +22,24 @@ export class PatientService {
   constructor(
     @InjectRepository(Patient)
     private readonly patientRepository: Repository<Patient>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async create(createPatientDto: CreatePatientDto) {
+    const { medicId, ...rest } = createPatientDto;
+    const medic = await this.userRepository.findOne({
+      where: { id: medicId },
+    });
+    if (!medic || !medic.roles.includes('medic'))
+      throw new NotFoundException('The user is not a medic or does not exist.');
     try {
-      const userInfo = this.patientRepository.create(createPatientDto);
-      await this.patientRepository.save(userInfo);
-      return userInfo;
+      const patientInfo = this.patientRepository.create({
+        ...rest,
+        medic,
+      });
+      await this.patientRepository.save(patientInfo);
+      return patientInfo;
     } catch (error) {
       this.handleExceptions(error);
     }
@@ -37,6 +49,7 @@ export class PatientService {
     const { page, limit } = paginationDto;
     const [patients, total] = await this.patientRepository.findAndCount({
       where: { isDeleted: false },
+      relations: ['medic'],
       take: limit,
       skip: (page - 1) * limit,
     });
@@ -50,7 +63,8 @@ export class PatientService {
 
   async findOne(id: string) {
     const findPatient = await this.patientRepository.findOne({
-      where: { id },
+      where: { id, isDeleted: false },
+      relations: ['medic'],
     });
     if (!findPatient)
       throw new NotFoundException(`Patient with id: ${id} not found`);
@@ -64,7 +78,7 @@ export class PatientService {
       ...updatePatientDto,
     });
     await this.patientRepository.save(patientToUpdate);
-    return patientToUpdate;
+    return this.findOne(id);
   }
 
   async remove(id: string) {
