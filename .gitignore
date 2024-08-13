@@ -6,6 +6,8 @@
 
 .env
 
+/.idx
+
 # Logs
 logs
 *.log
