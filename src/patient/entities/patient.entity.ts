@@ -21,6 +21,9 @@ export class Patient {
   @Column('text', { unique: true })
   dni: string;
 
+  @Column('text', { unique: true })
+  email: string;
+
   @Column('text')
   firstName: string;
 
