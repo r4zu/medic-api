@@ -11,6 +11,7 @@ import { UpdateMedicInfoDto } from './dto/update-medic-info.dto';
 import { ValidRoles } from 'src/auth/interfaces';
 
 @Controller('medic-info')
+@Auth()
 export class MedicInfoController {
   constructor(private readonly medicInfoService: MedicInfoService) {}
 

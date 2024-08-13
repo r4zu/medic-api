@@ -46,26 +46,13 @@ export class AssistantInfoService {
   }
 
   async findAssistantInfoByUser(user: User) {
-    // try {
-    //   const findAssistantInfoByUser =
-    //     await this.assistantInfoRepository.findOne({
-    //       where: { user: user },
-    //       relations: ['medic'],
-    //     });
-    //   if (!findAssistantInfoByUser)
-    //     throw new NotFoundException(`User with id: ${user.id} not found`);
-    //   return findAssistantInfoByUser;
-    // } catch (error) {
-    //   this.handleExceptions(error);
-    // }
-    const findAssistantInfoByUser =
-        await this.assistantInfoRepository.findOne({
-          where: { user: user },
-          relations: ['medic'],
-        });
-      if (!findAssistantInfoByUser)
-        throw new NotFoundException(`User with id: ${user.id} not found`);
-      return findAssistantInfoByUser;
+    const findAssistantInfoByUser = await this.assistantInfoRepository.findOne({
+      where: { user: user },
+      relations: ['medic'],
+    });
+    if (!findAssistantInfoByUser)
+      throw new NotFoundException(`User with id: ${user.id} not found`);
+    return findAssistantInfoByUser;
   }
 
   async update(user: User, updateAssistantInfoDto: UpdateAssistantInfoDto) {
