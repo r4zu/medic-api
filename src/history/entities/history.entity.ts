@@ -49,6 +49,8 @@ export class History {
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @ManyToOne(() => Patient, (patient) => patient.history)
+  @ManyToOne(() => Patient, (patient) => patient.history, {
+    onDelete: 'CASCADE',
+  })
   patient: Patient;
 }

@@ -45,10 +45,10 @@ export class Patient {
   @Column('boolean', { default: false })
   isDeleted: boolean;
 
-  @ManyToOne(() => User, (user) => user.patient)
+  @ManyToOne(() => User, (user) => user.patient, { onDelete: 'CASCADE' })
   medic: User;
 
-  @OneToMany(() => History, (history) => history.patient)
+  @OneToMany(() => History, (history) => history.patient, { cascade: true })
   history: History[];
 
   @OneToMany(() => Appointment, (appointment) => appointment.patient)

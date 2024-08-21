@@ -47,10 +47,12 @@ export class User {
   })
   assistant: AssistantInfo;
 
-  @OneToMany(() => Patient, (patient) => patient.medic)
+  @OneToMany(() => Patient, (patient) => patient.medic, { cascade: true })
   patient: Patient[];
 
-  @OneToMany(() => Appointment, (appointment) => appointment.medic)
+  @OneToMany(() => Appointment, (appointment) => appointment.medic, {
+    cascade: true,
+  })
   appointments: Appointment[];
 
   @BeforeInsert()
