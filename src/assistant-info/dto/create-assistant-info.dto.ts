@@ -1,21 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDate, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
-import { TransformDateWithHour } from 'src/common/transformers/date.transformer';
 import { IsValidDays } from 'src/common/decorators/days-validator.decorator';
 
 export class CreateAssistantInfoDto {
   @ApiProperty()
-  @IsDate()
-  @TransformDateWithHour()
+  @IsString()
   @IsNotEmpty()
-  checkIn: Date;
+  checkIn: string;
 
   @ApiProperty()
-  @IsDate()
-  @TransformDateWithHour()
+  @IsString()
   @IsNotEmpty()
-  checkOut: Date;
+  checkOut: string;
 
   @ApiProperty()
   @IsArray()

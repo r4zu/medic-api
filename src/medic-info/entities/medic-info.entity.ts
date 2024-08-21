@@ -19,11 +19,11 @@ export class MedicInfo {
   @Column('text', { unique: true })
   registry: string;
 
-  @Column('timestamp')
-  checkIn: Date;
+  @Column('text')
+  checkIn: string;
 
-  @Column('timestamp')
-  checkOut: Date;
+  @Column('text')
+  checkOut: string;
 
   @Column('text', { array: true })
   days: string[];

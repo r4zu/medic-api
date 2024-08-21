@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsUUID } from 'class-validator';
+import {
+  IsDate,
+  IsIn,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 import { TransformDateWithHour } from 'src/common/transformers/date.transformer';
 
@@ -15,6 +22,12 @@ export class CreateAppointmentDto {
   @TransformDateWithHour()
   @IsNotEmpty()
   endTime: Date;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @IsIn(['pending', 'completed', 'canceled'])
+  status?: 'pending' | 'completed' | 'canceled';
 
   @ApiProperty()
   @IsUUID()

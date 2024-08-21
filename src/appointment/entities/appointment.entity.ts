@@ -24,6 +24,9 @@ export class Appointment {
   @Column('timestamp')
   endTime: Date;
 
+  @Column('text', { default: 'pending' })
+  status: 'pending' | 'completed' | 'canceled';
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
